@@ -7,6 +7,7 @@ It can also export data for UE landscapes.
 
 
 ### Attention
+**Do not install on paths where non-English characters are used.**  
 May use huge amounts of memory.  
 The programmer used up to 28 GB of memory when using the software with 9 (3 x 3) 5 km x 5 km , 1 M/px GeoTIFF tiles distributed by the '[National LIDAR Programme](https://www.data.gov.uk/dataset/f0db0249-f17b-4036-9e65-309148c97ce4/national-lidar-programme)'.  
 Please use this as a guide.  
@@ -67,6 +68,7 @@ Example: --ue-landscape --small-units
 
 
 ### 注意
+**日本語など英語以外の文字が利用されている場所に設置しないでください。**
 このソフトウェアは大量のメモリを消費する可能性があります。  
 製作者が実際に '[National LIDAR Programme](https://www.data.gov.uk/dataset/f0db0249-f17b-4036-9e65-309148c97ce4/national-lidar-programme)' からダウンロードした 5km x 5km で 1M/px の GeoTIFF ファイル 9(3x3)枚を結合しようとした際、最大28GBのメモリを消費しました。  
 利用時の目安として参考にしてください。  
