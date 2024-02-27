@@ -1,0 +1,232 @@
+object main: Tmain
+  Left = 0
+  Top = 0
+  Caption = 'Merge GeoTIFF GUI'
+  ClientHeight = 480
+  ClientWidth = 640
+  Constraints.MaxHeight = 480.000000000000000000
+  Constraints.MaxWidth = 640.000000000000000000
+  Constraints.MinHeight = 480.000000000000000000
+  Constraints.MinWidth = 640.000000000000000000
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Input: TGroupBox
+    Anchors = []
+    Position.X = 24.000000000000000000
+    Position.Y = 24.000000000000000000
+    Size.Width = 585.000000000000000000
+    Size.Height = 89.000000000000000000
+    Size.PlatformDefault = False
+    Text = ' Set Input dir here.'
+    TabOrder = 1
+    object Input_TextBox: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Anchors = []
+      TabOrder = 38
+      Position.X = 24.000000000000000000
+      Position.Y = 34.000000000000000000
+      Size.Width = 465.000000000000000000
+      Size.Height = 34.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Input_Button: TButton
+      Anchors = []
+      Position.X = 497.000000000000000000
+      Position.Y = 34.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 39
+      Text = 'Select'
+      OnClick = Input_ButtonClick
+    end
+  end
+  object Output: TGroupBox
+    Anchors = []
+    Position.X = 24.000000000000000000
+    Position.Y = 137.000000000000000000
+    Size.Width = 585.000000000000000000
+    Size.Height = 89.000000000000000000
+    Size.PlatformDefault = False
+    Text = ' Set Output dir here.'
+    TabOrder = 0
+    object Output_TextBox: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Anchors = []
+      TabOrder = 38
+      Position.X = 24.000000000000000000
+      Position.Y = 34.000000000000000000
+      Size.Width = 465.000000000000000000
+      Size.Height = 34.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Output_Button: TButton
+      Anchors = []
+      Position.X = 497.000000000000000000
+      Position.Y = 34.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 39
+      Text = 'Select'
+      OnClick = Output_ButtonClick
+    end
+  end
+  object Option: TGroupBox
+    Anchors = []
+    Position.X = 24.000000000000000000
+    Position.Y = 248.000000000000000000
+    Size.Width = 585.000000000000000000
+    Size.Height = 161.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Option'
+    TabOrder = 2
+    object Output_graphs: TCheckBox
+      Position.X = 24.000000000000000000
+      Position.Y = 81.000000000000000000
+      TabOrder = 38
+      Text = 'Output graphs'
+    end
+    object Sigma: TGroupBox
+      Position.X = 24.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 120.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Sigma'
+      TabOrder = 42
+      object Sigma_TextBox: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 38
+        FilterChar = '0123456789.'
+        Text = '0.0'
+        TextSettings.HorzAlign = Center
+        Position.X = 8.000000000000000000
+        Position.Y = 19.000000000000000000
+      end
+    end
+    object Data_excluded: TGroupBox
+      Position.X = 152.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 120.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Data excluded'
+      TabOrder = 41
+      object Data_excluded_TextBox: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 38
+        FilterChar = '0123456789.'
+        Text = '0.0'
+        TextSettings.HorzAlign = Center
+        Position.X = 8.000000000000000000
+        Position.Y = 19.000000000000000000
+      end
+    end
+    object Data_excluded_l: TGroupBox
+      Position.X = 433.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 144.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Data excluded lower'
+      TabOrder = 40
+      object Data_excluded_l_TextBox: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 38
+        FilterChar = '0123456789.'
+        Text = '0.0'
+        TextSettings.HorzAlign = Center
+        Position.X = 27.000000000000000000
+        Position.Y = 19.000000000000000000
+        Enabled = False
+      end
+    end
+    object Data_excluded_u: TGroupBox
+      Position.X = 280.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 145.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Data excluded upper'
+      TabOrder = 39
+      object Data_excluded_u_TextBox: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 38
+        FilterChar = '0123456789.'
+        Text = '0.0'
+        TextSettings.HorzAlign = Center
+        Position.X = 24.000000000000000000
+        Position.Y = 19.000000000000000000
+        Enabled = False
+      end
+    end
+    object UE_Landscape: TCheckBox
+      Position.X = 24.000000000000000000
+      Position.Y = 108.000000000000000000
+      TabOrder = 43
+      Text = 'UE Landscape'
+      OnChange = UE_LandscapeChange
+    end
+    object Small_Units: TCheckBox
+      Enabled = False
+      Position.X = 24.000000000000000000
+      Position.Y = 135.000000000000000000
+      TabOrder = 44
+      Text = 'Small Units'
+    end
+    object Select_Data_excluded: TComboBox
+      Anchors = []
+      ItemIndex = 0
+      Position.X = 160.000000000000000000
+      Position.Y = 81.000000000000000000
+      Size.Width = 145.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 45
+      OnChange = Select_Data_excludedChange
+      object Normal: TListBoxItem
+        IsSelected = True
+        Size.Width = 19.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Data Excluded'
+      end
+      object U_L: TListBoxItem
+        TabOrder = 1
+        Text = 'Data Excluded u && l'
+      end
+    end
+    object Not_Flat_Earth: TCheckBox
+      Position.X = 160.000000000000000000
+      Position.Y = 134.000000000000000000
+      TabOrder = 46
+      Text = 'Not Flat Earth'
+    end
+  end
+  object Run: TButton
+    Anchors = []
+    Position.X = 184.000000000000000000
+    Position.Y = 432.000000000000000000
+    Size.Width = 80.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    Text = 'Run'
+    OnClick = RunClick
+  end
+  object Reset: TButton
+    Anchors = []
+    Position.X = 336.000000000000000000
+    Position.Y = 432.000000000000000000
+    Size.Width = 80.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    Text = 'Reset'
+    OnClick = ResetClick
+  end
+end
