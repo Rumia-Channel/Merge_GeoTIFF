@@ -4,13 +4,18 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from osgeo import gdal
+from osgeo import gdal, osr
+from pyproj import Transformer
 from scipy.ndimage import gaussian_filter
+from scipy.optimize import fsolve
 from PIL import Image
 import json
 import copy
+from tqdm import tqdm
 
-def main(input_dir, output_dir, sigma, output_graphs, data_excluded, data_excluded_u, data_excluded_l, ue_landscape, small_units, not_flat_earth):
+osr.UseExceptions()
+
+def main(input_dir, output_dir, sigma, output_graphs, data_excluded, data_excluded_u, data_excluded_l, not_flat_earth, ue_landscape, small_units):
 
     Image.MAX_IMAGE_PIXELS = None
 
@@ -107,8 +112,9 @@ def main(input_dir, output_dir, sigma, output_graphs, data_excluded, data_exclud
         raise FileNotFoundError(f'No GeoTIFF files found in the directory: {input_dir}')
 
     # gdal_merge.pyのオプションを設定
-    merge_options = gdal.BuildVRTOptions(resampleAlg='nearest')
+    merge_options = gdal.BuildVRTOptions(resampleAlg='cubic')
 
+    print("Done")
     print("Merging now...")
 
     # GeoTIFFファイルを結合
@@ -117,6 +123,14 @@ def main(input_dir, output_dir, sigma, output_graphs, data_excluded, data_exclud
 
     # 結合したGeoTIFFファイルを読み込む
     ds = gdal.Open(os.path.join(output_dir, 'output.tif'))
+
+    # 元の座標参照システムのEPSGコードを取得
+    src_srs = osr.SpatialReference()
+    src_srs.ImportFromWkt(ds.GetProjection())
+    src_epsg = src_srs.GetAttrValue("AUTHORITY", 1)
+
+    # 変換器を作成（元のEPSGコードからEPSG:4326へ）
+    transforme = Transformer.from_crs(int(src_epsg), 4326, always_xy=True)
 
     # 変換パラメータを取得
     transform_D = ds.GetGeoTransform()
@@ -133,8 +147,6 @@ def main(input_dir, output_dir, sigma, output_graphs, data_excluded, data_exclud
             unit_type = 'meter'
     else:
         raise ValueError('The GeoTIFF file does not contain any bands.')
-
-
     if output_graphs:
         # ヒストグラムと箱ひげ図を作成
         plt.figure(figsize=(12, 6))
@@ -164,34 +176,85 @@ def main(input_dir, output_dir, sigma, output_graphs, data_excluded, data_exclud
 
     # 地球のように丸くする
     if not_flat_earth:
-        # 地球の半径 (m or km)
-        R_equator = 6378.1370  # km
-        R_pole = 6356.7523  # km
 
-        # 単位タイプに基づいて地球の半径を調整
-        if unit_type == 'meter':
-            R_equator *= 1000  # km to m
-            R_pole *= 1000  # km to m
+        # WGS84の定数
+        R_equator = 6378137.0  # 赤道半径（m）
+        if not unit_type == "meter":
+            R_equator = R_equator / 1000
+        f = 1 / 298.257223563  # 扁平率
+        #R_pole = R_equator * (1 - f)  # 極半径（m）
 
-        # 緯度の配列を作成
-        height, width = array.shape
-        latitudes = np.linspace(transform_D[3], transform_D[3] + height*transform_D[5], height)
+        # ピクセルのサイズを取得
+        cols = ds.RasterXSize
+        rows = ds.RasterYSize
 
-        # 緯度をラジアンに変換
-        latitudes_rad = np.deg2rad(latitudes)
+        # 緯度と経度の配列を初期化
+        lats = np.zeros((rows, cols))
+        lons = np.zeros((rows, cols))
 
-        # 各緯度での地球の半径を計算
-        R = np.sqrt(((R_equator**2 * np.cos(latitudes_rad))**2 + (R_pole**2 * np.sin(latitudes_rad))**2) / 
-                    ((R_equator * np.cos(latitudes_rad))**2 + (R_pole * np.sin(latitudes_rad))**2))
+        pbar_ac = tqdm(total=rows*cols, desc="Converting to angles... ")
+        # 各ピクセルの緯度と経度を計算
+        for i in range(rows):
+            for j in range(cols):
+                lons[i, j], lats[i, j] = gdal.ApplyGeoTransform(transform_D, j, i)
 
-        # 高度データに地球の半径からの相対的な長さを加える
-        array += (R - R_pole)
+                # EPSG:4326へ変換
+                lons[i, j], lats[i, j] = transforme.transform(lons[i, j], lats[i, j])
+                # 進捗バーを更新
+                pbar_ac.update()
+        pbar_ac.close()
 
-        
+        print("During adaptation to elevation data ...")
 
+        # 緯度と経度をラジアンに変換
+        L_rad = np.deg2rad(lats)
+        B_rad = np.deg2rad(lons)
+
+        # 楕円体の半径を計算
+        R = R_equator * (1 - f * np.sin(L_rad)**2)**0.5
+
+        # 楕円体の中心を原点としたときの各点の座標を計算
+        X = R * np.cos(L_rad) * np.cos(B_rad)
+        Y = R * np.cos(L_rad) * np.sin(B_rad)
+        Z = R * np.sin(L_rad)
+
+        # 楕円体を回転させるための回転行列を定義
+        theta_L = np.pi / 2 - np.median(L_rad)  # 中心の緯度が最大になるようにθを設定
+        theta_B = np.pi / 2 - np.median(B_rad)  # 中心の経度が最大になるようにθを設定
+        rotation_matrix_L = np.array([
+            [np.cos(theta_L), -np.sin(theta_L), 0],
+            [np.sin(theta_L), np.cos(theta_L), 0],
+            [0, 0, 1]
+        ])
+        rotation_matrix_B = np.array([
+            [np.cos(theta_B), -np.sin(theta_B), 0],
+            [0, 0, 1],
+            [-np.sin(theta_B), np.cos(theta_B), 0]
+        ])
+
+        # 各点の座標を回転させる
+        rotated_coords_L = np.dot(rotation_matrix_L, np.array([X.flatten(), Y.flatten(), Z.flatten()]))
+        rotated_coords_B = np.dot(rotation_matrix_B, rotated_coords_L)
+        rotated_X = rotated_coords_B[0, :].reshape(rows, cols)
+        rotated_Y = rotated_coords_B[1, :].reshape(rows, cols)
+        rotated_Z = rotated_coords_B[2, :].reshape(rows, cols)
+
+        # 回転させた後の各点の高度を計算
+        rotated_elevation = np.sqrt(rotated_X**2 + rotated_Y**2 + rotated_Z**2) - R
+
+        #print(np.min((rotated_elevation - np.min(rotated_elevation)).reshape(rows, cols)))
+        #print(np.max((rotated_elevation - np.min(rotated_elevation)).reshape(rows, cols)))
+
+        # arrayに回転させた後の高度から最小値を引いた値を加算
+        array += (rotated_elevation - np.min(rotated_elevation)).reshape(rows, cols)
+
+    print("Done")
+    print("Outputting png image...")
     # 正規化した標高データを基に色分けしたPNG画像を出力
     normalized_array = (((array - array.min()) / (array.max() - array.min())* 65535).astype(np.uint16))
     plt.imsave(os.path.join(output_dir, 'output.png'), (normalized_array), cmap='gray')
+
+    print("Done")
 
     print(f'GeoTIFF files have been merged into: {os.path.join(output_dir, "output.tif")}')
     print('A PNG image has been created based on the elevation data.')
@@ -263,6 +326,8 @@ def main(input_dir, output_dir, sigma, output_graphs, data_excluded, data_exclud
 
             print(f'Split maps and data files have been created in: {res_dir}')
 
+    print("Compleat")
+
 if __name__ == '__main__':
     # コマンドラインオプションの設定
     parser = argparse.ArgumentParser(description='Merge GeoTIFF files and create a PNG image.')
@@ -278,4 +343,4 @@ if __name__ == '__main__':
     parser.add_argument('--small-units', action='store_true', help='ALWAYS USE WITH --ue-landscape. When binarising elevation data, binarise with elevation data for individual tiles.')
     args = parser.parse_args()
 
-    main(args.input_dir, args.output_dir, args.sigma, args.output_graphs, args.data_excluded, args.data_excluded_u, args.data_excluded_l, args.ue_landscape, args.small_units, args.not_flat_earth)
+    main(args.input_dir, args.output_dir, args.sigma, args.output_graphs, args.data_excluded, args.data_excluded_u, args.data_excluded_l, args.not_flat_earth, args.ue_landscape, args.small_units)

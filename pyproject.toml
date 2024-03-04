@@ -1,0 +1,42 @@
+[project]
+name = "merge-geotiff"
+version = "1.1.0"
+description = "Merge multiple GeoTIFFs"
+authors = [
+    { name = "Rumia_Chnnel", email = "github@rumia-ch.uk" }
+]
+dependencies = [
+    "pip>=24.0",
+    "setuptools>=69.1.1",
+    "pillow>=10.2.0",
+    "delphifmx>=1.0.8",
+    "kiwisolver>=1.4.5",
+    "nuitka>=2.0.5",
+    "numpy>=1.24.4",
+    "pandas>=2.0.3",
+    "matplotlib>=3.7.5",
+    "scipy>=1.10.1",
+    "seaborn>=0.13.2",
+    "pyproj>=3.5.0",
+    "GDAL @ https://github.com/cgohlke/geospatial-wheels/releases/download/v2024.2.18/GDAL-3.8.4-cp311-cp311-win_amd64.whl",
+    "tqdm>=4.66.2",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[project.scripts]
+hello = "merge_geotiff:hello"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/merge_geotiff"]
