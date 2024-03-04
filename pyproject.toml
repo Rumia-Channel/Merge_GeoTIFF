@@ -20,6 +20,7 @@ dependencies = [
     "pyproj>=3.5.0",
     "GDAL @ https://github.com/cgohlke/geospatial-wheels/releases/download/v2024.2.18/GDAL-3.8.4-cp311-cp311-win_amd64.whl",
     "tqdm>=4.66.2",
+    "pip-licenses>=4.3.4",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

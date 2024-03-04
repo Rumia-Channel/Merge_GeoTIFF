@@ -128,6 +128,7 @@ GDAL:  MIT License
 Nuitka:  Apache Software License  
 argparse:  Python Software Foundation License  
 certifi:  Mozilla Public License 2.0 (MPL 2.0)  
+colorama: BSD License  
 contourpy:  BSD License  
 cycler:  BSD License  
 delphifmx:  Other/Proprietary License (BSD)  
@@ -140,10 +141,12 @@ packaging:  Apache Software License; BSD License
 pandas:  BSD License  
 pillow:  Historical Permission Notice and Disclaimer (HPND)  
 pyparsing:  MIT License  
+pyproj: MIT License  
 python-dateutil:  Apache Software License; BSD License  
 pytz:  MIT License  
-scipy:  BSD License
-seaborn:  BSD License
-six:  MIT License
-tzdata:  Apache Software License
-zstandard: BSD License
+scipy:  BSD License  
+seaborn:  BSD License  
+six:  MIT License  
+tqdm: MIT License; Mozilla Public License 2.0 (MPL 2.0)  
+tzdata:  Apache Software License  
+zstandard: BSD License  
