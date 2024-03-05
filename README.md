@@ -9,7 +9,7 @@ It can also export data for UE landscapes.
 ### Attention
 **Do not install on paths where non-English characters are used.**  
 May use huge amounts of memory.  
-The programmer used up to 28 GB of memory when using the software with 9 (3 x 3) 5 km x 5 km , 1 M/px GeoTIFF tiles distributed by the '[National LIDAR Programme](https://www.data.gov.uk/dataset/f0db0249-f17b-4036-9e65-309148c97ce4/national-lidar-programme)'.  
+The programmer used up to 28 GB of memory when using the software with 9 (3 x 3) 5 km x 5 km , 1 M/px GeoTIFF tiles distributed by the [National LIDAR Programme](https://www.data.gov.uk/dataset/f0db0249-f17b-4036-9e65-309148c97ce4/national-lidar-programme).  
 Please use this as a guide.  
 
 ### Option Description.
@@ -61,6 +61,13 @@ When importing very complex and very large maps, more detailed maps can be creat
 However, it is not necessary unless the map is very complex, as the height of each landscape break may vary slightly.  
 Example: --ue-landscape --small-units  
 
+#### --landscape-res
+**ALWAYS USE WITH --ue-landscape.** 
+Specifies the resolution of the height map image to be exported for Unreal Engine landscape.  
+By default, all resolutions listed in the [Landscape Technical Guide](https://docs.unrealengine.com/5.3/en-US/landscape-technical-guide-in-unreal-engine/) are exported.  
+However, this can take a very long time, so it is recommended to specify that only the resolution you are looking for is exported.  
+Example: --ue-landscape --landscape-res 4033 8129  
+
 ## JA
 
 このソフトウェアは、フォルダ内に存在する複数の GeoTIFF ファイルを正確な位置に配置し、結合します。  
@@ -70,7 +77,7 @@ Example: --ue-landscape --small-units
 ### 注意
 **日本語など英語以外の文字が利用されている場所に設置しないでください。**  
 このソフトウェアは大量のメモリを消費する可能性があります。  
-製作者が実際に '[National LIDAR Programme](https://www.data.gov.uk/dataset/f0db0249-f17b-4036-9e65-309148c97ce4/national-lidar-programme)' からダウンロードした 5km x 5km で 1M/px の GeoTIFF ファイル 9(3x3)枚を結合しようとした際、最大28GBのメモリを消費しました。  
+製作者が実際に [National LIDAR Programme](https://www.data.gov.uk/dataset/f0db0249-f17b-4036-9e65-309148c97ce4/national-lidar-programme) からダウンロードした 5km x 5km で 1M/px の GeoTIFF ファイル 9(3x3)枚を結合しようとした際、最大28GBのメモリを消費しました。  
 利用時の目安として参考にしてください。  
 
 ### オプションの詳細
@@ -122,6 +129,13 @@ Unreal Engine でのランドスケープ向けにデータを書き出します
 非常に複雑で大きな地図をインポートする場合、空間の小さなセクションごとに高さマップデータが作成されるため、より詳細なデータを作成することができます。  
 正し、ランドスケープごとの高さデータが若干ずれる可能性があるので、非常に複雑で大きな地図をインポートする場合以外は推奨しません。  
 例: --ue-landscape --small-units  
+
+#### --landscape-res
+**必ず --ue-landscape と併用してください。**    
+Unreal Engine のランドスケープ向けに書き出す高さマップ画像の解像度を指定します。  
+デフォルトでは [ランドスケープテクニカルガイド](https://docs.unrealengine.com/5.3/ja/landscape-technical-guide-in-unreal-engine/) に記載されているすべての解像度を書き出します。  
+ただし、これには非常に長い時間がかかるため、自分が求めている解像度のみを書き出すように指定することを推奨します。  
+例: --ue-landscape --landscape-res 4033 8129  
 
 ## This software uses the following licence packages
 GDAL:  MIT License  

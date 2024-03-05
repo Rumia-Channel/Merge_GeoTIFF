@@ -165,22 +165,22 @@ object main: Tmain
     end
     object UE_Landscape: TCheckBox
       Position.X = 24.000000000000000000
-      Position.Y = 108.000000000000000000
+      Position.Y = 134.000000000000000000
       TabOrder = 43
       Text = 'UE Landscape'
       OnChange = UE_LandscapeChange
     end
     object Small_Units: TCheckBox
       Enabled = False
-      Position.X = 24.000000000000000000
-      Position.Y = 135.000000000000000000
+      Position.X = 160.000000000000000000
+      Position.Y = 134.000000000000000000
       TabOrder = 44
       Text = 'Small Units'
     end
     object Select_Data_excluded: TComboBox
       Anchors = []
       ItemIndex = 0
-      Position.X = 160.000000000000000000
+      Position.X = 415.000000000000000000
       Position.Y = 81.000000000000000000
       Size.Width = 145.000000000000000000
       Size.Height = 22.000000000000000000
@@ -201,10 +201,33 @@ object main: Tmain
       end
     end
     object Not_Flat_Earth: TCheckBox
-      Position.X = 160.000000000000000000
-      Position.Y = 134.000000000000000000
+      Position.X = 24.000000000000000000
+      Position.Y = 107.000000000000000000
       TabOrder = 46
       Text = 'Not Flat Earth'
+    end
+    object Landscape_resolution: TGroupBox
+      Anchors = []
+      Position.X = 152.000000000000000000
+      Position.Y = 78.000000000000000000
+      Size.Width = 224.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Landscape resolution'
+      TabOrder = 47
+      object Landscape_resolution_Textbox: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 38
+        FilterChar = '0123456789, '
+        Text = '127 253 505 1009 2017 4033 8129'
+        TextSettings.HorzAlign = Center
+        Position.X = 8.000000000000000000
+        Position.Y = 18.000000000000000000
+        Enabled = False
+        Size.Width = 208.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
     end
   end
   object Run: TButton

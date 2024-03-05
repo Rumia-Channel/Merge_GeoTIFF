@@ -15,7 +15,7 @@ from tqdm import tqdm
 
 osr.UseExceptions()
 
-def main(input_dir, output_dir, sigma, output_graphs, data_excluded, data_excluded_u, data_excluded_l, not_flat_earth, ue_landscape, small_units):
+def main(input_dir, output_dir, sigma, output_graphs, data_excluded, data_excluded_u, data_excluded_l, not_flat_earth, ue_landscape, small_units, landscape_res):
 
     Image.MAX_IMAGE_PIXELS = None
 
@@ -274,8 +274,7 @@ def main(input_dir, output_dir, sigma, output_graphs, data_excluded, data_exclud
         print(f'A text file with the basic data created: {os.path.join(output_dir, "output.txt")}')
 
         # 解像度ごとに画像を分割して出力
-        resolutions = [127, 253, 505, 1009, 2017, 4033, 8129]
-        for res in resolutions:
+        for res in landscape_res:
             # 分割後の画像を保存するディレクトリを作成
             res_dir = os.path.join(output_dir, f'resolution_{res}x{res}')
             os.makedirs(res_dir, exist_ok=True)
@@ -341,6 +340,7 @@ if __name__ == '__main__':
     parser.add_argument('--not-flat-earth', action='store_true', help='Produce height map data along the spherical shape of the earth.')
     parser.add_argument('--ue-landscape', action='store_true', help='Prepare data for Unreal Engine landscapes.')
     parser.add_argument('--small-units', action='store_true', help='ALWAYS USE WITH --ue-landscape. When binarising elevation data, binarise with elevation data for individual tiles.')
+    parser.add_argument('--landscape-res', nargs='+', type=int, default=[127, 253, 505, 1009, 2017, 4033, 8129], help='ALWAYS USE WITH --ue-landscape. Specifies the resolution at which the tiles are split into tiles. The default is all resolutions listed in the "Landscape Technical Guide".')
     args = parser.parse_args()
 
-    main(args.input_dir, args.output_dir, args.sigma, args.output_graphs, args.data_excluded, args.data_excluded_u, args.data_excluded_l, args.not_flat_earth, args.ue_landscape, args.small_units)
+    main(args.input_dir, args.output_dir, args.sigma, args.output_graphs, args.data_excluded, args.data_excluded_u, args.data_excluded_l, args.not_flat_earth, args.ue_landscape, args.small_units, args.landscape_res)
