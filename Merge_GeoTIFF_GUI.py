@@ -152,6 +152,8 @@ class main(Form):
         #フラットアーサー
         self.Not_Flat_Earth.IsChecked = False
 
+        msgb.showinfo('Reset','All settings have been returned to their initial state.')
+
 def main_func():
 
     if not os.path.isfile('./Merge_GeoTIFF.exe'):
