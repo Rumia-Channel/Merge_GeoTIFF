@@ -134,13 +134,13 @@ class main(Form):
         #ガウスぼかし
         self.Sigma_TextBox.Text = 0.0
         #外れ値の除外
-        self.Select_Data_excluded.ItemIndex == 0
+        self.Select_Data_excluded.ItemIndex = 0
         self.Data_excluded_TextBox.Enabled = True
         self.Data_excluded_TextBox.Text = 0.0
         self.Data_excluded_l_TextBox.Enabled = False
-        self.Data_excluded_u_TextBox.Text = 0.0
-        self.Data_excluded_l_TextBox.Enabled = False
         self.Data_excluded_l_TextBox.Text = 0.0
+        self.Data_excluded_u_TextBox.Enabled = False
+        self.Data_excluded_u_TextBox.Text = 0.0
         #グラフ
         self.Output_graphs.IsChecked = False
         #ランドスケープ
@@ -148,6 +148,7 @@ class main(Form):
         self.Small_Units.IsChecked = False
         self.Small_Units.Enabled = False
         self.Landscape_resolution_Textbox.Enabled = False
+        self.Landscape_resolution_Textbox.Text = '127 253 505 1009 2017 4033 8129'
         #フラットアーサー
         self.Not_Flat_Earth.IsChecked = False
 
