@@ -9,11 +9,15 @@ wheels/
 # venv
 .venv
 
-#rye
-.python-version
+# legacy lock files
 requirements-dev.lock
 requirements.lock
-src
 
 #Nuitka
 out
+
+# Serena
+/.serena/
+
+# CocoIndex Code (ccc)
+/.cocoindex_code/

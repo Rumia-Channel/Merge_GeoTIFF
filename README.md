@@ -12,6 +12,28 @@ May use huge amounts of memory.
 The programmer used up to 28 GB of memory when using the software with 9 (3 x 3) 5 km x 5 km , 1 M/px GeoTIFF tiles distributed by the [National LIDAR Programme](https://www.data.gov.uk/dataset/f0db0249-f17b-4036-9e65-309148c97ce4/national-lidar-programme).  
 Please use this as a guide.  
 
+### Setup with uv
+This project is managed with [uv](https://docs.astral.sh/uv/).
+The latest GDAL wheel from `cgohlke/geospatial-wheels` currently targets CPython 3.12 for this project, so use Python 3.12.
+
+```powershell
+uv sync
+uv run merge-geotiff --help
+```
+
+To refresh the GDAL wheel from the latest GitHub release and update the lockfile:
+
+```powershell
+uv run update-gdal-wheel
+uv lock --upgrade
+```
+
+To start the GUI from source:
+
+```powershell
+uv run merge-geotiff-gui
+```
+
 ### Option Description.
 
 #### --input-dir (required)
@@ -79,6 +101,28 @@ Example: --ue-landscape --landscape-res 4033 8129
 このソフトウェアは大量のメモリを消費する可能性があります。  
 製作者が実際に [National LIDAR Programme](https://www.data.gov.uk/dataset/f0db0249-f17b-4036-9e65-309148c97ce4/national-lidar-programme) からダウンロードした 5km x 5km で 1M/px の GeoTIFF ファイル 9(3x3)枚を結合しようとした際、最大28GBのメモリを消費しました。  
 利用時の目安として参考にしてください。  
+
+### uv を使ったセットアップ
+このプロジェクトは [uv](https://docs.astral.sh/uv/) で管理します。
+現在このプロジェクトで利用する `cgohlke/geospatial-wheels` の最新 GDAL wheel は CPython 3.12 向けのため、Python 3.12 を利用してください。
+
+```powershell
+uv sync
+uv run merge-geotiff --help
+```
+
+GitHub の最新リリースから GDAL wheel を更新し、ロックファイルも更新する場合:
+
+```powershell
+uv run update-gdal-wheel
+uv lock --upgrade
+```
+
+ソースから GUI を起動する場合:
+
+```powershell
+uv run merge-geotiff-gui
+```
 
 ### オプションの詳細
 
